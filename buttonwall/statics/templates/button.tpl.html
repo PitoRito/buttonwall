@@ -1,0 +1,6 @@
+<button
+    style="background-color: {{ $ctrl.data.color }}; border: 1px solid black; width: 50px;"
+    class="btn"
+    ng-mousedown="$ctrl.press()"
+    ng-mouseup="$ctrl.release()"
+    >{{  $ctrl.data.id }}</button>

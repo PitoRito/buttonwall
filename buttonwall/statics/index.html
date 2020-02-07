@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<!-- define angular app -->
+<html>
+
+<head>
+  <!-- SCROLLS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
+
+  <!-- SPELLS -->
+    <script src="//unpkg.com/angular@1.6.5/angular.js"></script>
+    <script src="//unpkg.com/@uirouter/angularjs@1.0.5/release/angular-ui-router.js"></script>
+    <script src="js/websocket.js"></script>
+    <script src="js/button.js"></script>
+    <script src="js/simulator.js"></script>
+    <style>
+        * {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+
+<!-- define angular controller -->
+<body ng-app="simulator">
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <h1>Button Wall Simulator</h1>
+      </div>
+    </div>
+  </nav>
+
+  <div id="main">
+
+    <!-- angular templating -->
+    <!-- this is where content will be injected -->
+    <div ng-controller="buttonController" style="text-align: center">
+        <span ng-repeat="button in buttons">
+            <bw data="button"></bw>
+            <br ng-if="$odd" />
+        </span>
+    </div>
+
+  </div>
+
+  <footer class="text-center">
+    <p>All right reserved <a href="http://www.lasergamebrno.cz">LasergameBrno</a></p>
+  </footer>
+
+</body>
+
+</html>
+
