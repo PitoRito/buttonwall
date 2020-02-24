@@ -1,4 +1,4 @@
 *.kdev4
-/venv
+venv/
 *.egg-info
 __pycache__
