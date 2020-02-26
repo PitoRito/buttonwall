@@ -2,6 +2,7 @@
 import asyncio
 import logging
 from .color import Color, ColorWhite, ColorRed
+from functools import partial
 
 __all__ = ['Button']
 logger = logging.getLogger(__name__)

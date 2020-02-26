@@ -39,6 +39,9 @@ class Color(object):
     def intensity(self):
         return 0.2126 * self.r + 0.7152 * self.g + 0.0722 * self.b
 
+    def compare(self, color):
+        return self.r == color.r and self.g == color.g and self.b == color.b and self.i == color.i
+
     def normalize(self, intensity):
         if self.intensity == 0:
             return ColorNone()
