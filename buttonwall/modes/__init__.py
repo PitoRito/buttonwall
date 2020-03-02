@@ -40,6 +40,12 @@ class DummyMode:
         elif button.id % 2 == 1 and not button.color.compare(ColorWhite()):
             self.player_two_score = self.player_two_score +1
 
+        '''If there is pressed button of wrong color'''
+        # if button.id % 2 == 0 and not button.color.compare(ColorGreen()):
+        #     self.player_one_score = self.player_one_score -1
+        # elif button.id % 2 == 1 and not button.color.compare(ColorGreen()):
+        #     self.player_two_score = self.player_two_score -1
+
         self.pressed_event.set()
 
 
