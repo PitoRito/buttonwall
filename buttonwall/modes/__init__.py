@@ -7,14 +7,19 @@ from functools import partial
 
 logger = logging.getLogger(__name__)
 
+class Player:
+    def __init__(self):
+        self.score = 0
+        self.reaction_time = []
+
 class DummyMode:
     def __init__(self, manager):
         ''' Constructor '''
         self.manager = manager
         self.pressed_event = asyncio.Event()
         self.running = False
-        self.player_one_score = 0
-        self.player_two_score = 0
+        self.player_one = Player()
+        self.player_two = Player()
 
     def start(self):
         ''' starts mode '''
@@ -24,11 +29,6 @@ class DummyMode:
     def stop(self):
         self.running = False
 
-    # def button_pressed_callback(self, future: asyncio.Future):
-    #     ''' If there is pressed some button '''
-    #     future.result().add_done_callback(self.button_pressed_callback)
-    #     self.pressed_event.set()
-
     def button_pressed_callback(self, future: asyncio.Future, button: Button):
         ''' If there is pressed some button '''
 
@@ -36,15 +36,20 @@ class DummyMode:
         
        
         if button.id % 2 == 0 and not button.color.compare(ColorWhite()):
-            self.player_one_score = self.player_one_score +1
+            self.player_one.score = self.player_one.score +1
+            reaction_time = button.reaction_time_end - button.reaction_time_start
+            self.player_one.reaction_time.append(reaction_time)
         elif button.id % 2 == 1 and not button.color.compare(ColorWhite()):
-            self.player_two_score = self.player_two_score +1
+            self.player_two.score = self.player_two.score +1
+            reaction_time = button.reaction_time_end - button.reaction_time_start
+            self.player_two.reaction_time.append(reaction_time)
+
 
         '''If there is pressed button of wrong color'''
         # if button.id % 2 == 0 and not button.color.compare(ColorGreen()):
-        #     self.player_one_score = self.player_one_score -1
+        #     self.player_one.score = self.player_one.score -1
         # elif button.id % 2 == 1 and not button.color.compare(ColorGreen()):
-        #     self.player_two_score = self.player_two_score -1
+        #     self.player_two.score = self.player_two.score -1
 
         self.pressed_event.set()
 
@@ -80,7 +85,7 @@ class DummyMode:
                     button.set_color(ColorWhite())
 
                 while True: 
-                # for button in self.manager.buttons.values():
+
                     if not self.pressed_event.is_set():
                         break
 

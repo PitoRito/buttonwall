@@ -1,6 +1,7 @@
 ''' Module to demonstrate button functionality '''
 import asyncio
 import logging
+import time
 from .color import Color, ColorWhite, ColorRed
 from functools import partial
 
@@ -22,12 +23,15 @@ class Button:
         self.pressed_future = self.loop.create_future()
         self.released_future = self.loop.create_future()
         self.color_future = self.loop.create_future()
+        self.reaction_time_end = 0
+        self.reaction_time_start = 0
 
     def press(self):
         logger.debug("Pressed: %d", self.id)
         future = self.pressed_future
         self.pressed_future = self.loop.create_future()
         future.set_result(self.pressed_future)
+        self.reaction_time_end = time.time()
 
     def release(self):
         logger.debug("Released: %d", self.id)
@@ -41,3 +45,5 @@ class Button:
         self.color_future = self.loop.create_future()
         self.color = color
         future.set_result(self.color_future)
+        self.reaction_time_start = time.time() 
+        
