@@ -84,8 +84,16 @@ class DummyMode:
                     if not self.pressed_event.is_set():
                         break
 
-                    button= choice(self.manager.buttons)
+                    button = choice(self.manager.buttons)
                     logger.debug("###############  for button id: %d ############", button.id)
-                    button.set_color(choice(colors))
+
+                    if button.id % 2 == 0:
+                        second_button = self.manager.buttons.get(button.id -1)
+                    else:
+                        second_button = self.manager.buttons.get(button.id +1)
+
+                    new_color= choice(colors)
+                    button.set_color(new_color)
+                    second_button.set_color(new_color)
 
                     await asyncio.sleep(0.1)
