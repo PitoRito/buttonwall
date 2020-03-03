@@ -76,7 +76,7 @@ class DummyMode:
                 button.pressed_future.add_done_callback(partial(self.button_pressed_callback, button=button))
                 button.released_future.add_done_callback(partial(self.button_releasse_callback, button=button))
             
-            timeout = 10
+            timeout = 60
             loop = asyncio.get_event_loop()
             timeoutTimerHandle = loop.call_later(timeout, self.timeout)
 
