@@ -33,7 +33,6 @@ class DummyMode:
         ''' If there is pressed some button '''
 
         future.result().add_done_callback(partial (self.button_pressed_callback, button= button))
-        
        
         if button.id % 2 == 0 and not button.color.compare(ColorWhite()):
             self.player_one.score = self.player_one.score +1
@@ -60,7 +59,8 @@ class DummyMode:
         future.result().add_done_callback(partial (self.button_releasse_callback, button= button))
         self.pressed_event.clear()
 
-    # def button
+    def timeout(self):
+        self.pressed_event.set()
 
     async def run(self):
         '''
@@ -68,37 +68,45 @@ class DummyMode:
         If there is some button pressed then starts random color changing cycle
         '''
        
-        colors = [ColorWhite(), ColorRed(), ColorGreen(), ColorBlue(), ColorPurple()]
+        colors = [ColorRed(), ColorGreen(), ColorBlue(), ColorPurple()]
         if not self.running:
             self.running = True
 
             for button in self.manager.buttons.values():
                 button.pressed_future.add_done_callback(partial(self.button_pressed_callback, button=button))
                 button.released_future.add_done_callback(partial(self.button_releasse_callback, button=button))
-
-                 
+            
+            timeout = 10
+            loop = asyncio.get_event_loop()
+            timeoutTimerHandle = loop.call_later(timeout, self.timeout)
 
             while self.running:
-                await self.pressed_event.wait()
 
-                for button in self.manager.buttons.values():
-                    button.set_color(ColorWhite())
+                await self.pressed_event.wait()
+                
+                timeoutTimerHandle.cancel()
 
                 while True: 
 
                     if not self.pressed_event.is_set():
                         break
 
+                    for button in self.manager.buttons.values():
+                        button.set_color(ColorWhite())
+
                     button = choice(self.manager.buttons)
                     logger.debug("###############  for button id: %d ############", button.id)
 
                     if button.id % 2 == 0:
-                        second_button = self.manager.buttons.get(button.id -1)
+                        second_button = self.manager.buttons.get(button.id - 1)
                     else:
-                        second_button = self.manager.buttons.get(button.id +1)
+                        second_button = self.manager.buttons.get(button.id + 1)
 
                     new_color= choice(colors)
                     button.set_color(new_color)
                     second_button.set_color(new_color)
+                    
+                    
+                    timeoutTimerHandle = loop.call_later(timeout, self.timeout)
 
-                    await asyncio.sleep(0.1)
+                    self.pressed_event.clear()
